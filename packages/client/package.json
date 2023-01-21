@@ -1,5 +1,6 @@
 {
   "name": "client",
+  "description": "客户端外壳",
   "private": true,
   "version": "0.0.0",
   "scripts": {

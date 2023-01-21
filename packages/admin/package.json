@@ -1,9 +1,11 @@
 {
+  "name": "admin",
   "private": true,
+  "description": "管理后台",
   "author": "WilsonWu <wilson.wu.yy@gmail.com>",
   "scripts": {
-    "dev": "max dev",
     "build": "max build",
+    "dev": "max dev",
     "format": "prettier --cache --write .",
     "postinstall": "max setup",
     "setup": "max setup",
