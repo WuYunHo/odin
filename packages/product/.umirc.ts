@@ -29,22 +29,11 @@ export default defineConfig({
       path: '/table',
       component: './Table',
     },
-    {
-      name: '产品',
-      path: '/product',
-      component: './Product',
-    },
   ],
   npmClient: 'pnpm',
   qiankun: {
-    master: {
-      enable: true,
-      apps: [
-        {
-          name: 'product',
-          entry: '//localhost:8001',
-        }
-      ]
+    slave: {
+      enable: true
     },
   },
 });
