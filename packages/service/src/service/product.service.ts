@@ -23,5 +23,14 @@ export class ProductService {
 
     // save success
     console.log('product id = ', productResult.id);
+
+    return productResult;
+  }
+
+  // load
+  async loadProducts() {
+    const products = await this.productModel.find();
+
+    return products;
   }
 }
