@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Body } from '@midwayjs/decorator';
+import { Body, Controller, Get, Inject, Post } from '@midwayjs/decorator';
 import { Context } from '@midwayjs/koa';
 import { ProductService } from '../service/product.service';
 
@@ -18,7 +18,13 @@ export class APIController {
 
   @Post('/addProductByName')
   async addProduct(@Body('name') name: string) {
-    this.productService.saveProduct(name);
+    await this.productService.saveProduct(name);
     return { success: true, message: 'OK', data: name };
+  }
+
+  @Get('/loadProducts')
+  async loadProducts() {
+    const products = await this.productService.loadProducts();
+    return { success: true, message: 'OK', data: products };
   }
 }
