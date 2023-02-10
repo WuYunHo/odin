@@ -8,6 +8,7 @@ export default defineConfig({
   request: {},
   layout: {
     title: '@umijs/max',
+    headerTheme: 'dark',
   },
   routes: [
     {
@@ -25,7 +26,7 @@ export default defineConfig({
       component: './Access',
     },
     {
-      name: ' CRUD 示例',
+      name: 'CRUD 示例',
       path: '/table',
       component: './Table',
     },
@@ -36,5 +37,8 @@ export default defineConfig({
       enable: true
     },
   },
+  dva: {
+    
+  }
 });
 

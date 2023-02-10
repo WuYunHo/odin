@@ -15,7 +15,10 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "^2.0.1",
     "@umijs/max": "^4.0.47",
-    "antd": "^5.0.0"
+    "antd": "^5.0.0",
+    "react-particles-js": "^3.6.0",
+    "react-tsparticles": "^2.8.0",
+    "tsparticles": "^2.8.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

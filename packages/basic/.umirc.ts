@@ -11,6 +11,12 @@ export default defineConfig({
   },
   routes: [
     {
+      name: '登录',
+      path: '/login',
+      component: './Login',
+      layout: false,
+    },
+    {
       path: '/',
       redirect: '/home',
     },
@@ -25,7 +31,7 @@ export default defineConfig({
       component: './Access',
     },
     {
-      name: ' CRUD 示例',
+      name: 'CRUD 示例',
       path: '/table',
       component: './Table',
     },
