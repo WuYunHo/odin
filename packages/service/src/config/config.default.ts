@@ -1,5 +1,6 @@
 import { MidwayConfig } from '@midwayjs/core';
-import { Product } from '../entity/product';
+import { Users } from '../entity/user';
+// import { Product } from '../entity/product';
 
 export default {
   // use for cookie sign key, should change to your own and keep security
@@ -24,7 +25,7 @@ export default {
         logging: true,
 
         // 配置实体模型
-        entities: [Product],
+        entities: [Users],
       },
     },
   },

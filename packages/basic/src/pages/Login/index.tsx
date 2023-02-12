@@ -7,6 +7,7 @@ import Particles from "react-tsparticles";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadFull } from "tsparticles";
 import { history, useModel } from '@umijs/max';
+import axios from 'axios';
 
 const Login: React.FC = () => {
   const particlesInit = useCallback(async (engine: Engine) => {
@@ -26,6 +27,7 @@ const Login: React.FC = () => {
   const onFinish = (values: any) => {
       console.log('Received values of form: ', values);
       //修改全局的initialState，使主面板渲染Layout
+
       setInitialState({
         isLogin: true,
         userInfo:values
