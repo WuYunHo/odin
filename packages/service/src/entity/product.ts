@@ -12,15 +12,25 @@ export class Product {
   id: number;
 
   @Column({
-    length: 100,
+    length: 200,
   })
   name: string;
+
+  @Column({
+    length: 100,
+  })
+  type: string;
+
+  @Column({
+    type: 'double',
+  })
+  price: number;
+
+  @Column()
+  count: number;
 
   @CreateDateColumn({
     type: 'timestamp',
   })
   time: Date;
-
-  @Column()
-  count: number;
 }
