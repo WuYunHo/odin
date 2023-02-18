@@ -8,6 +8,7 @@ export default defineConfig({
   request: {},
   layout: {
     title: '@umijs/max',
+    headerTheme: 'dark',
   },
   routes: [
     {
@@ -59,4 +60,3 @@ export default defineConfig({
     }
   }
 });
-

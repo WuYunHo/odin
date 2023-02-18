@@ -1,4 +1,4 @@
-import {defineConfig} from '@umijs/max';
+import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
   antd: {},
@@ -10,12 +10,6 @@ export default defineConfig({
     title: '@umijs/max',
   },
   routes: [
-    {
-      name: '登录',
-      path: '/login',
-      component: './Login',
-      layout: false,
-    },
     {
       path: '/',
       redirect: '/home',
@@ -31,26 +25,15 @@ export default defineConfig({
       component: './Access',
     },
     {
-      name: 'CRUD 示例',
-      path: '/table',
-      component: './Table',
-    },
-    {
-      name: '产品',
-      path: '/product',
-      component: './Product',
+        name: ' CRUD 示例',
+        path: '/table',
+        component: './Table',
     },
   ],
   npmClient: 'pnpm',
   qiankun: {
-    master: {
-      enable: true,
-      apps: [
-        {
-          name: 'product',
-          entry: '//localhost:8001',
-        }
-      ]
+    slave: {
+      enable: true
     },
   },
 });
