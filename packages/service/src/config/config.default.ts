@@ -1,4 +1,6 @@
 import { MidwayConfig } from '@midwayjs/core';
+import { Users } from '../entity/user';
+'../entity/product';
 import { Product } from '../entity/product';
 import { Product_type } from '../entity/product_type';
 
@@ -25,7 +27,7 @@ export default {
         logging: false,
 
         // 配置实体模型
-        entities: [Product, Product_type],
+        entities: [Users, Product, Product_type],
       },
     },
   },

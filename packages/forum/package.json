@@ -1,8 +1,7 @@
 {
-  "name": "basic",
-  "description": "基座应用，负责上下游通信",
+  "name": "forum",
   "private": true,
-  "author": "WilsonWu <wilson.wu.yy@gmail.com>",
+  "author": "wuyunho <1458565220@qq.com>",
   "scripts": {
     "dev": "max dev",
     "build": "max build",
@@ -14,16 +13,17 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "^2.0.1",
-    "@umijs/max": "^4.0.47",
+    "@umijs/max": "^4.0.52",
     "antd": "^5.0.0",
-    "axios": "^1.3.2",
-    "react-particles-js": "^3.6.0",
-    "react-tsparticles": "^2.8.0",
-    "tsparticles": "^2.8.0"
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
+    "react-draft-wysiwyg": "^1.15.0"
   },
   "devDependencies": {
+    "@types/draftjs-to-html": "^0.8.1",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/react-draft-wysiwyg": "^1.13.4",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^2",
