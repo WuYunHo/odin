@@ -1,3 +1,5 @@
+import mockjs from 'mockjs'
+
 const users = [
   { id: 0, name: 'Umi', nickName: 'U', gender: 'MALE' },
   { id: 1, name: 'Fish', nickName: 'B', gender: 'FEMALE' },
@@ -17,4 +19,12 @@ export default {
       errorCode: 0,
     });
   },
+  'POST /api/user/loadUserByAccount': mockjs.mock({
+    user: {
+      name: '@name',
+      avatar: '@color',
+      type: '@natural',
+      token: '@guid'
+    }
+  })
 };
