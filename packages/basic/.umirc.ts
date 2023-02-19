@@ -29,6 +29,11 @@ export default defineConfig({
       path: '/table',
       component: './Table',
     },
+    {
+      name: '小卖部',
+      path: 'product',
+      component: './Product'
+    }
   ],
   npmClient: 'pnpm',
   qiankun: {
