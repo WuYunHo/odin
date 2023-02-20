@@ -9,6 +9,7 @@ export default defineConfig({
   layout: {
     title: '@umijs/max',
   },
+  dva: {},
   routes: [
     {
       name: '登录',
@@ -36,6 +37,11 @@ export default defineConfig({
       component: './Table',
     },
     {
+      name: '论坛',
+      path: '/forum',
+      component: './Forum',
+    },
+    {
       name: '产品',
       path: '/product',
       component: './Product',
@@ -47,11 +53,26 @@ export default defineConfig({
       enable: true,
       apps: [
         {
-          name: 'product',
+          name: 'forum',
           entry: '//localhost:8001',
+        },
+        {
+          name: 'product',
+          entry: '//localhost:8002'
         }
       ]
     },
+  },
+  proxy: {
+    '/login/': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+    },
+    '/api/': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+      "pathRewrite": { "^/api": ''}
+    }
   },
 });
 

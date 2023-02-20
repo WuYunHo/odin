@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Button, Checkbox, Form, Input, Popover, Steps  } from 'antd';
+import { Button, Checkbox, Form, Input, Popover, Steps, message, notification  } from 'antd';
 import { PageContainer } from '@ant-design/pro-components';
 import {
   QuestionOutlined
 } from '@ant-design/icons';
-
 import style from './index.module.css'
 import Forumeditor from '@/components/Guide/Forumeditor';
-import { message } from 'antd';
 import { history, useModel } from '@umijs/max';
+import axios from 'axios'
 
 const content = (
   <div>
@@ -21,13 +20,15 @@ const App: React.FC = () => {
   const [current, setcurrent] = useState(0)
   const [formInfo, setformInfo] = useState({})
   const [content, setcontent] = useState('')
+  const [user, setuser] = useState({})
 
-  console.log('forum', masterProps)
+  // console.log('forum', masterProps.initialState)
+  
 
   const handleNext = () => {
+    setuser(masterProps.initialState.userInfo)
     if(current === 0){
       forumRef.current.validateFields().then((res: any)=>{
-        // console.log(res)
         setcurrent( current + 1 )
         setformInfo(res)
       }).catch( (err: any) => {
@@ -45,14 +46,30 @@ const App: React.FC = () => {
   const handleSave = (state: number) => {
     //传入formInfo数据 state为保存/发布
     // {...formInfo, initialState.userID} 
+    console.log('user', user)
+    axios.post('/api/forumapi/addArticle ', {
+      context: content, 
+      userID: user.id, 
+      title: formInfo.title,
+      state: state,
+    }).then(res=>{
+      console.log(res)
+      //跳转
+      if(state === 0){
+        history.push('/access')
+      }else if(state === 1){
+        history.push('/table')
+      }
+
+      notification.info({
+        message: '通知',
+        description:
+          `您可以到${ state === 0 ? '草稿箱' : '审核列表'}查看您的贴子`,
+        placement: 'bottomRight'
+      })
+    })
     
-    //跳转
-    // history.push('')
-     if(state === 0){
-      history.push('/access')
-     }else if(state === 1){
-      history.push('/table')
-     }
+    
   }
 
   const handlePerivious = () => {
@@ -118,7 +135,7 @@ const App: React.FC = () => {
 
       <div className={current === 1 ? '':style.active} style={{marginTop: '50px'}}>
         <Forumeditor getContext={(value: any)=>{
-          // console.log(value)
+          console.log(value)
           setcontent(value)
         }}></Forumeditor>
       </div>

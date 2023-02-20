@@ -7,7 +7,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: '论坛',
   },
   routes: [
     {
@@ -25,16 +25,28 @@ export default defineConfig({
       component: './Access',
     },
     {
-        name: ' CRUD 示例',
+        name: 'CRUD 示例',
         path: '/table',
         component: './Table',
     },
+    {
+      name: '草稿箱',
+      path: '/draft',
+      component: './Draft',
+  },
   ],
   npmClient: 'pnpm',
   qiankun: {
     slave: {
       enable: true
     },
+  },
+  proxy: {
+    '/api': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+      "pathRewrite": { "^/api": ''}
+    }
   },
 });
 

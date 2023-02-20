@@ -18,7 +18,7 @@ const Forumeditor: React.FC = (props) => {
       onEditorStateChange={(editorState)=>setEditorState(editorState)}
 
       onBlur={()=>{
-        console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
+        // console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())))
         props.getContext(draftToHtml(convertToRaw(editorState.getCurrentContent())))
       }}
     />; 

@@ -34,9 +34,14 @@ export class UsersService {
         });
         console.log("message of the user:", finduser);
         if(finduser.password == password){
-          return true
+          return {
+            finduser,
+            state: true,
+          }
         }else{
-          return false
+          return {
+            state: false,
+          }
         }
   }
 }

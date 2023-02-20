@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import './index.css'
 import { useCallback } from "react";
 import Particles from "react-tsparticles";
@@ -8,8 +8,11 @@ import type { Container, Engine } from "tsparticles-engine";
 import { loadFull } from "tsparticles";
 import { history, useModel } from '@umijs/max';
 import axios from 'axios';
-
-const Login: React.FC = () => {
+import { setMasterOptions } from '@/.umi/plugin-qiankun-master/masterOptions';
+import { connect } from '@umijs/max';
+import { useSelector } from '@umijs/max';
+ 
+const Login: React.FC = (props) => {
   const particlesInit = useCallback(async (engine: Engine) => {
       console.log(engine);
 
@@ -24,26 +27,58 @@ const Login: React.FC = () => {
   }, []);
 
   const { initialState, setInitialState } = useModel('@@initialState')
+  const [messageApi, contextHolder] = message.useMessage();
+  const type = useSelector((state: any)=>{
+    return state.user
+  })
+  console.log(type)
+
   const onFinish = (values: any) => {
       console.log('Received values of form: ', values);
-      //修改全局的initialState，使主面板渲染Layout
-
-      setInitialState({
-        isLogin: true,
-        userInfo:values
-      })
-
-      //触发路由切换至
-    
-    setTimeout(() => {
-      history.push('/')
-    },0)
       
+
+      axios.get(`login/userlogin?name=${values.username}&password=${values.password}`).then(res=>{
+        console.log(res.data.data)
+        if(res.data.data.state){
+          messageApi.open({
+            type: 'success',
+            content: '登录成功！',
+            duration: 2,
+          });
+          const user = res.data.data.finduser
+          setTimeout(()=>{
+            //修改全局的initialState，使主面板渲染Layout
+            setInitialState({
+              isLogin: true,
+              userInfo: user,
+            })
+
+            props.dispatch({
+              type: 'user/testChange',
+              payload: user.type,
+            })
+
+            //触发路由切换至
+          
+            setTimeout(() => {
+              history.push('/')
+            },2000)
+          })
+        }else{
+          messageApi.open({
+            type: 'error',
+            content: '登录失败！',
+            duration: 2,
+          });
+        }
+      })
     };
   
+    console.log(props.user)
 
   return (
     <div>
+      {contextHolder}
       <Particles id="tsparticles" init={particlesInit} loaded={particlesLoaded} params={
        {
           "autoPlay": true,
@@ -635,4 +670,8 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+const mapModelToProps = (user: any) =>{ 
+  return user
+} 
+
+export default connect(mapModelToProps)(Login);
