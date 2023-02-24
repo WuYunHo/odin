@@ -4,8 +4,12 @@ import { Button, Space, Table, Tag, Modal, Form, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import { history, useModel } from '@umijs/max';
-import { DeleteOutlined, EditOutlined, EnterOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EnterOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import Forumeditor from '@/components/Guide/Forumeditor';
+import { queryArticleList } from '@/models/api';
+import moment from 'moment';
+
+const {confirm} = Modal
 
 interface DataType {
   key: string;
@@ -15,63 +19,108 @@ interface DataType {
   tags: string[];
 }
 
-
-
-
-
-
 const AccessPage: React.FC = () => {
-  const masterProps = useModel('@@qiankunStateFromMaster');
   const [dataSource, setdataSource] = useState([])
   const [content, setcontent] = useState('')
-  const [user, setuser] = useState({})
 
-  const forumRef = useRef(null)
+  const [change, setchange] = useState(0)
+
+  const forminfo = useRef(null)
+  const [modalcontext, setmodalcontext] = useState('')
+
+  // const { articledata, loadarticles } = useModel('forum')
+  // console.log(articledata.list)
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    setuser(masterProps.initialState.userInfo)
-    axios.post('/api//forumapi/findDraft', {
-      userID: user.id
-    }).then(res=>{
-      console.log(res)
-      setdataSource(res.data.data)
-    })
-  }, [])
-
-  const handleDelete = (item: any) => {
-    
-  }
-  
-  const handleUpdate = (item: any) => {
-    
-  }
-  
-  const handlePub = (item: any) => {
-      
-  }
-  
   const showModal = (item: any) => {
     setIsModalOpen(true);
 
-    forumRef.current.setFieldsValue({item})
+    setmodalcontext(item.context)
+
+    setTimeout(()=>{
+      forminfo.current.setFieldsValue(item)
+    })
+    
   };
-  
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
-  
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    // setuser(masterProps.initialState.userInfo)
+    axios.post('/api/forumapi/findDraft', {
+      userID: 0
+    }).then(res=>{
+      console.log(res)
+      // console.log('change:', change)
+      setdataSource(res.data.data)
+    })
+  },[change]
+  )
+    // setdataSource(articledata.list)
+  // }, [articledata.list])
+
+  //控制删除表项按钮点击后弹出提示
+  const confirmMethod = ( item: any )=>{
+    confirm({
+      title: 'Do you Want to delete these items?',
+      icon: <ExclamationCircleOutlined />,
+      //content: 'Some descriptions',
+      onOk() {
+        handleDelete(item)
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+
+  const handleDelete = (item: any) => {
+    console.log('handleDelete', item) 
+
+    //删除数据
+    //request删除数据
+    setdataSource(dataSource.filter(data=>data.articleID!==item.articleID))
+    axios.post('/api/forumapi/deleteArticle', {
+      articleID: item.articleID
+    }).then(res=>{
+      setchange(Math.random())
+    })
+  }
+  
+  const handlePub = (item: any) => {
+      console.log('handlePub', item)
+
+      //修改数据状态为1
+      //state = 0（未提交） 1 （审核中） 2（未通过） 3（已发布）
+      //request更新状态
+      axios.post('/api/forumapi/pubArticle', {
+        articleID: item.articleID
+      }).then(res=>{
+        setchange(Math.random())
+      })
+  }
 
   const columns: ColumnsType<DataType> = [
     {
       title: 'ArticleID',
       dataIndex: 'articleID',
       key: 'articleID',
-      render: (text) => <a>{text}</a>,
+      render: (text, item) => {
+        console.log(item)
+        return (
+          <div>
+            <a onClick={()=>showModal(item)}>{text}</a>
+          </div>
+        )
+      }
     },
     {
       title: 'Title',
@@ -82,6 +131,9 @@ const AccessPage: React.FC = () => {
       title: 'Pubtime',
       dataIndex: 'pubtime',
       key: 'pubtime',
+      render: (pubtime) => {
+        return  <div>{moment(pubtime).format('MMMM Do YYYY, h:mm:ss a')}</div> 
+      }
     },
     {
       title: 'State',
@@ -89,9 +141,13 @@ const AccessPage: React.FC = () => {
       dataIndex: 'state',
       render: ( state ) => {
         if( state === 0){
-          return <Tag color='orange'>未提交</Tag>
+          return <Tag color='grey'>未提交</Tag>
         }else if( state === 1 ){
+          return <Tag color='orange'>审核中</Tag>
+        }else if( state === 2 ){
           return <Tag color='red'>未通过</Tag>
+        }else{
+          return <Tag color='green'>已发布</Tag>
         }
         
       },
@@ -102,7 +158,7 @@ const AccessPage: React.FC = () => {
       render: ( item ) => {
         console.log(item)
         return <div>
-          <Button danger shape='circle' icon={<DeleteOutlined />} onClick={()=>handleDelete(item)}></Button>
+          <Button danger shape='circle' icon={<DeleteOutlined />} onClick={()=>confirmMethod(item)}></Button>
           {/* <Button type='primary' shape='circle' icon={<EditOutlined />}onClick={()=>showModal(item)}></Button> */}
           <Button shape='circle' icon={<EnterOutlined />} onClick={()=>handlePub(item)}></Button>
         </div>
@@ -115,41 +171,34 @@ const AccessPage: React.FC = () => {
     <PageContainer
       ghost
       header={{
-        title: '草稿箱',
+        title: '我的帖子',
       }}
     >
       <Table columns={columns} dataSource={dataSource} />
-      {/* <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={800} forceRender>
+      <Modal title="details" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <Form
           name="basic"
           labelCol={{ span: 4 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 800 }}
+          wrapperCol={{ span: 20 }}
+          style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           autoComplete="off"
-          ref={forumRef}
+          ref={forminfo}
         >
           <Form.Item
-            label="标题"
+            label="Title"
             name="title"
-            rules={[{ required: true, message: 'Please input your title!' }]}
           >
             <Input />
           </Form.Item>
-
-          <Form.Item
-            label="内容"
-            name="context"
-            rules={[{ required: true, message: 'Please input your context!' }]}
-          >
-            <Forumeditor getContext={(value: any)=>{
-              console.log(value)
-              setcontent(value)
-            }}></Forumeditor>
-          </Form.Item>
+          
         </Form>
-      </Modal> */}
+        <div dangerouslySetInnerHTML={{
+          __html:modalcontext
+        }} style={{border: 'solid 1px', borderRadius: '10px'}}></div>
+      </Modal>
     </PageContainer>
+    
   );
 };
 

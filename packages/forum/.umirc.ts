@@ -9,7 +9,8 @@ export default defineConfig({
   layout: {
     title: '论坛',
   },
-  routes: [
+  dva: {},
+  routes: [ 
     {
       path: '/',
       redirect: '/home',
@@ -17,23 +18,29 @@ export default defineConfig({
     {
       name: '首页',
       path: '/home',
-      component: './Home',
+      component: './Home', 
+    },
+    {
+      name: '发帖',
+      path: '/edit',
+      component: './Edit',
     },
     {
       name: '权限演示',
       path: '/access',
       component: './Access',
+      access: 'canSeeAccess'
     },
     {
-        name: 'CRUD 示例',
-        path: '/table',
-        component: './Table',
-    },
-    {
-      name: '草稿箱',
+      name: '我的帖子',
       path: '/draft',
       component: './Draft',
-  },
+    },
+    {
+      name: '审核列表',
+      path: '/drafting',
+      component: './Drafting',
+    },
   ],
   npmClient: 'pnpm',
   qiankun: {
@@ -42,7 +49,7 @@ export default defineConfig({
     },
   },
   proxy: {
-    '/api': {
+    '/api/': {
       'target': 'http://localhost:7001',
       'changeOrigin': true,
       "pathRewrite": { "^/api": ''}

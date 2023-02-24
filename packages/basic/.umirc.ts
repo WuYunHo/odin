@@ -1,4 +1,4 @@
-import {defineConfig} from '@umijs/max';
+import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
   antd: {},
@@ -7,16 +7,10 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: ' '
   },
   dva: {},
   routes: [
-    {
-      name: '登录',
-      path: '/login',
-      component: './Login',
-      layout: false,
-    },
     {
       path: '/',
       redirect: '/home',
@@ -27,24 +21,29 @@ export default defineConfig({
       component: './Home',
     },
     {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
-    },
-    {
-      name: 'CRUD 示例',
-      path: '/table',
-      component: './Table',
-    },
-    {
       name: '论坛',
       path: '/forum',
       component: './Forum',
     },
     {
-      name: '产品',
-      path: '/product',
-      component: './Product',
+      name: '小卖部',
+      path: 'product',
+      component: './Product'
+    },
+    {
+      name: '校园展示',
+      path: 'exhibition',
+      component: './Exhibition'
+    },
+    {
+      name: '政策公开',
+      path: 'policy',
+      component: './Policy'
+    },
+    {
+      name: '我的',
+      path: 'mine',
+      component: './Mine'
     },
   ],
   npmClient: 'pnpm',
@@ -56,23 +55,22 @@ export default defineConfig({
           name: 'forum',
           entry: '//localhost:8001',
         },
-        {
-          name: 'product',
-          entry: '//localhost:8002'
-        }
+        // {
+        //   name: 'product',
+        //   entry: '//localhost:8002'
+        // },
+        // {
+        //   name: 'exhibition',
+        //   entry: '//localhost:8001'
+        // },
       ]
     },
   },
   proxy: {
-    '/login/': {
-      'target': 'http://localhost:7001',
+    '/api/forum': {
+      'target': 'http://localhost:8001',
       'changeOrigin': true,
-    },
-    '/api/': {
-      'target': 'http://localhost:7001',
-      'changeOrigin': true,
-      "pathRewrite": { "^/api": ''}
+      // "pathRewrite": { "^/api": ''}
     }
   },
 });
-

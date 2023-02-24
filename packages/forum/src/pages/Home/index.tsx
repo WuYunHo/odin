@@ -1,167 +1,156 @@
-import React, { useRef, useState } from 'react';
-import { Button, Checkbox, Form, Input, Popover, Steps, message, notification  } from 'antd';
-import { PageContainer } from '@ant-design/pro-components';
-import {
-  QuestionOutlined
-} from '@ant-design/icons';
-import style from './index.module.css'
-import Forumeditor from '@/components/Guide/Forumeditor';
-import { history, useModel } from '@umijs/max';
-import axios from 'axios'
+import React, { useEffect, useRef, useState } from 'react';
+import { Form, Input, Modal, RadioChangeEvent } from 'antd';
+import { Button, Descriptions, Radio } from 'antd';
+import { useModel } from '@umijs/max';
 
-const content = (
-  <div>
-    <p>just follow the step bar prompts</p>
-  </div>
-);
+import './index.css'
+import axios from 'axios';
+import moment from 'moment';
+import Comments from '@/components/comment';
 
 const App: React.FC = () => {
-  const masterProps = useModel('@@qiankunStateFromMaster');
-  const [current, setcurrent] = useState(0)
-  const [formInfo, setformInfo] = useState({})
-  const [content, setcontent] = useState('')
-  const [user, setuser] = useState({})
+  const [size, setSize] = useState<'default' | 'middle' | 'small'>('default');
 
-  // console.log('forum', masterProps.initialState)
-  
+  const [pubingdata, setpubingdata] = useState({})
+  const [change, setchange] = useState(0)
 
-  const handleNext = () => {
-    setuser(masterProps.initialState.userInfo)
-    if(current === 0){
-      forumRef.current.validateFields().then((res: any)=>{
-        setcurrent( current + 1 )
-        setformInfo(res)
-      }).catch( (err: any) => {
-        console.log(err)
-      })
-    }else{
-      if(content === '' || content.trim() === "<p><p>"){
-        message.error('内容不能为空!')
-      }else{
-        setcurrent( current + 1 )
-      }
-    }
-  }
+  const forminfo = useRef(null)
+  const [modalcontext, setmodalcontext] = useState('')
 
-  const handleSave = (state: number) => {
-    //传入formInfo数据 state为保存/发布
-    // {...formInfo, initialState.userID} 
-    console.log('user', user)
-    axios.post('/api/forumapi/addArticle ', {
-      context: content, 
-      userID: user.id, 
-      title: formInfo.title,
-      state: state,
-    }).then(res=>{
-      console.log(res)
-      //跳转
-      if(state === 0){
-        history.push('/access')
-      }else if(state === 1){
-        history.push('/table')
-      }
+  const [modalID, setmodalID] = useState('')
 
-      notification.info({
-        message: '通知',
-        description:
-          `您可以到${ state === 0 ? '草稿箱' : '审核列表'}查看您的贴子`,
-        placement: 'bottomRight'
-      })
+  const onChange = (e: RadioChangeEvent) => {
+    console.log('size checked', e.target.value);
+    setSize(e.target.value);
+  };
+
+  // Mock
+  // const { pubarticledata, loadpubarticles } = useModel('fourmdrafting')
+  // console.log(pubarticledata)
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = (item: any) => {
+    setIsModalOpen(true);
+
+    setmodalcontext(item.context)
+    console.log(item.articleID)
+    setmodalID(item.articleID)
+
+    setTimeout(()=>{
+      forminfo.current.setFieldsValue(item)
     })
     
-    
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
+  const handlelight = (item: any) => {
+    // 点赞 light+1
+    axios.post('/api/forumapi/lightArticle',{
+      articleID:  item.articleID
+    }).then(res=>{
+      console.log(res)
+      setchange(Math.random())
+    })
   }
 
-  const handlePerivious = () => {
-    setcurrent( current - 1 )
+  const handlecollect = (item: any) => {
+    // 收藏 collect+1
+    axios.post('/api/forumapi/collectArticle',{
+      articleID:  item.articleID
+    }).then(res=>{
+      console.log(res)
+      setchange(Math.random())
+    })
   }
 
-  const forumRef = useRef(null)
+  useEffect(()=>{
+    axios.post('/api/forumapi/findPubing',{
+      
+    }).then(res=>{
+      console.log(res)
+      setpubingdata(res)
+    })
+  },[change])
 
   return (
-    <PageContainer ghost>
-      <Popover content={content} title="Publish forum" >
-        <Button type="primary" style={{width: '100px'}}>发帖<QuestionOutlined /></Button>
-      </Popover>
-      
-      <Steps
-        style={{marginTop: '20px'}}
-        current={ current }
-        items={[
-          {
-            title: '基本信息',
-            description: '标题',
-          },
-          {
-            title: '发帖内容',
-            description: '主题内容',
-            subTitle: 'Left 00:00:08',
-          },
-          {
-            title: '帖子提交',
-            description: "保存草稿或提交审核",
-          },
-        ]}
-      />
-
-      <div className={current === 0 ? '':style.active}>
+    <div>
+      <Radio.Group onChange={onChange} value={size}>
+        <Radio value="default">default</Radio>
+        <Radio value="middle">middle</Radio>
+        <Radio value="small">small</Radio>
+      </Radio.Group>
+      <br />
+      <br />
+      {
+        pubingdata.data ? pubingdata.data.data.map(item=>
+          <div className='pubcardborder'>
+            <div className='pubcard' onClick={()=>showModal(item)}>
+              <Descriptions
+                bordered
+                title={item.articleID}
+                size={size}
+                extra={
+                  <div>
+                    <Button type="primary" style={{marginRight: '20px'}} onClick={()=>handlelight(item)}>点赞</Button>
+                    <Button type="primary" onClick={()=>handlecollect(item)}>收藏</Button>
+                  </div>
+                }
+                style={{marginTop: '20px'}}
+              >
+                <Descriptions.Item label="Title">{item.title}</Descriptions.Item>
+                <Descriptions.Item label="auth">{item.userID}</Descriptions.Item>
+                
+                {/* <Descriptions.Item label="read">{item.looks}</Descriptions.Item> */}
+                <Descriptions.Item label="点赞">{item.light}</Descriptions.Item>
+                <Descriptions.Item label="收藏">{item.collect}</Descriptions.Item>
+                <Descriptions.Item label="time" span={2}>{moment(item.pubtime).format('MMMM Do YYYY, h:mm:ss a')}</Descriptions.Item>
+                <Descriptions.Item label="Config Info" contentStyle={{height: '200px'}}>
+                <div dangerouslySetInnerHTML={{
+                  __html:item.context
+                }}></div>
+                </Descriptions.Item>
+              </Descriptions>
+            </div>
+          </div>
+          
+          
+        )  : <div></div>
+      }
+      <Modal title="details" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
+          // labelCol={{ span: 4 }}
+          // wrapperCol={{ span: 20 }}
           style={{ maxWidth: 600 }}
           initialValues={{ remember: true }}
           autoComplete="off"
-          ref={forumRef}
+          ref={forminfo}
         >
           <Form.Item
-            style={{marginTop: '20px'}}
-            label="标题"
+            label="标题："
             name="title"
-            rules={[{ required: true, message: 'Please input your username!' }]}
           >
             <Input />
           </Form.Item>
-
-          <Form.Item
-            label="description"
-            name="description"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
+          
         </Form>
-      </div>
-
-      <div className={current === 1 ? '':style.active} style={{marginTop: '50px'}}>
-        <Forumeditor getContext={(value: any)=>{
-          console.log(value)
-          setcontent(value)
-        }}></Forumeditor>
-      </div>
-
-      <div className={current === 2 ? '':style.active}>
-
-      </div>
-
-      <div style={{marginTop: '50px'}}>
-        {
-          current == 2 && <span>
-            <Button type='primary' onClick={()=>handleSave(0)}>save</Button>
-            <Button danger onClick={()=>handleSave(1)}>pull</Button>
-          </span>
-        }
-        {
-          current < 2 && <Button type='primary' onClick={handleNext}>next</Button>
-        }
-        {
-          current > 0 && <Button onClick={handlePerivious}>back</Button>
-        }
-        
-        
-      </div>
-    </PageContainer>
-  );  
+        <div dangerouslySetInnerHTML={{
+          __html:modalcontext
+        }} style={{border: 'solid 1px', borderRadius: '10px'}}></div>
+        <Comments id={modalID}></Comments>
+      </Modal>
+      
+    </div>
+  );
 };
 
 export default App;

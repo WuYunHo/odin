@@ -1,7 +1,9 @@
 import { MidwayConfig } from '@midwayjs/core';
 import { Article, Comment } from '../entity/forum';
 import { Users } from '../entity/user';
-// import { Product } from '../entity/product';
+'../entity/product';
+import { Product } from '../entity/product';
+import { Product_type } from '../entity/product_type';
 
 export default {
   // use for cookie sign key, should change to your own and keep security
@@ -23,10 +25,10 @@ export default {
         database:
           process.env.MIDWAY_SERVER_ENV === 'prod' ? 'db_release' : 'db_dev',
         synchronize: true, // 如果第一次使用，不存在表，有同步的需求可以写 true，注意会丢数据
-        logging: true,
+        logging: false,
 
         // 配置实体模型
-        entities: [Users, Article, Comment],
+        entities: [Users, Article, Comment, Product, Product_type],
       },
     },
   },

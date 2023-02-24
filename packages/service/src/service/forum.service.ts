@@ -26,7 +26,29 @@ export class ForumService {
     let draft = await this.articleModel.find({
       where: {
         userID: userID,
-        state: 0,
+        // state: 1,
+      }
+    })
+    console.log('there are draft: ', draft)
+    return draft
+  } 
+
+  async findDrafting() {
+    let draft = await this.articleModel.find({
+      where: {
+        // userID: userID,
+        state: 1,
+      }
+    })
+    console.log('there are draft: ', draft)
+    return draft
+  } 
+
+  async findPubing() {
+    let draft = await this.articleModel.find({
+      where: {
+        // userID: userID,
+        state: 3,
       }
     })
     console.log('there are draft: ', draft)
@@ -40,6 +62,9 @@ export class ForumService {
     article.title = title;
     article.userID = userID;
     article.context = context;
+    article.collect = 0;
+    article.looks = 0;
+    article.light = 0;
 
     // save entity
     const articleResult = await this.articleModel.save(article);
@@ -67,7 +92,20 @@ export class ForumService {
         articleID: articleID,
       },
     });
-    stateUpdate.state = 0;
+    stateUpdate.state = 2;
+
+    await this.articleModel.save(stateUpdate);
+
+    console.log('article state =', stateUpdate.articleID);
+  }
+
+  async pubingArticle(articleID: number) {
+    let stateUpdate = await this.articleModel.findOne({
+      where: {
+        articleID: articleID,
+      },
+    });
+    stateUpdate.state = 3;
 
     await this.articleModel.save(stateUpdate);
 
@@ -82,7 +120,36 @@ export class ForumService {
     });
 
     // 删除单个
-    await this.articleModel.remove(photo);
+    const deleteArticle = await this.articleModel.remove(photo);
+    return deleteArticle
+  }
+
+  //点赞
+  async lightArticle(articleID: number) {
+    const article = await this.articleModel.findOne({
+      where: {
+        articleID: articleID,
+      },
+    });
+    article.light = article.light + 1
+    await this.articleModel.save(article);
+
+    console.log('lighted article:', article);
+    return article
+  }
+
+  //收藏
+  async collectArticle(articleID: number) {
+    const article = await this.articleModel.findOne({
+      where: {
+        articleID: articleID,
+      },
+    });
+    article.collect = article.collect + 1
+    await this.articleModel.save(article);
+
+    console.log('lighted article:', article);
+    return article
   }
 
   // 一级comment
@@ -91,13 +158,24 @@ export class ForumService {
     comment.articleID = articleID;
     comment.context = context;
     comment.userID = userID;
-    comment.tarcomID = null;
+    comment.tarcomID = -1;
 
     // save entity
     const commentResult = await this.commentModel.save(comment);
 
     // save success
     console.log('comment id = ', commentResult.comID);
+  }
+
+  async findFirstComment(articleID: number) {
+    let comment = await this.commentModel.find({
+      where: {
+        // userID: userID,
+        articleID: articleID,
+      }
+    })
+    console.log('there are comments: ', comment)
+    return comment
   }
 
   //二级/三级comment

@@ -18,6 +18,7 @@ export default defineConfig({
       name: '首页',
       path: '/home',
       component: './Home',
+      layout: false,
     },
     {
       name: '权限演示',
@@ -25,16 +26,16 @@ export default defineConfig({
       component: './Access',
     },
     {
-        name: ' CRUD 示例',
+        name: 'CRUD 示例',
         path: '/table',
         component: './Table',
     },
-    {
-      name: 'Exhibition',
-      path: '/display',
-      component: './Display',
-    },
   ],
+  qiankun: {
+    slave: {
+      enable: true
+    },
+  },
   npmClient: 'pnpm',
 });
 

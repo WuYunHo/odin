@@ -1,4 +1,4 @@
-import {defineConfig} from '@umijs/max';
+import { defineConfig } from '@umijs/max';
 
 export default defineConfig({
   antd: {},
@@ -30,6 +30,21 @@ export default defineConfig({
       path: '/table',
       component: './Table',
     },
+    {
+      name: 'product-商家分类发布',
+      path: '/product-cfy',
+      component: './Product-cfy',
+    },
+    {
+      name: 'product-商家表格展示',
+      path: '/product-table',
+      component: './Product-table',
+    },
+    {
+      name: 'product-用户表格展示',
+      path: '/product-card',
+      component: './Product-card',
+    },
   ],
   npmClient: 'pnpm',
   qiankun: {
@@ -37,8 +52,11 @@ export default defineConfig({
       enable: true
     },
   },
-  dva: {
-    
+
+  proxy: {
+    '/products': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+    }
   }
 });
-

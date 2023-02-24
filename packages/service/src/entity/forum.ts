@@ -30,6 +30,15 @@ export class Article {
     length: 200,
   })
   title: string;
+
+  @Column()
+  collect: number;
+  
+  @Column()
+  looks: number;
+
+  @Column()
+  light: number;
 }
 
 @Entity()

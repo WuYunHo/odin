@@ -9,28 +9,76 @@ export class ProductService {
   productModel: Repository<Product>;
 
   // save
-  async saveProduct(name: string) {
-    // create a entity object
-
+  async saveProduct(name: string, type: string, price: number, count: number) {
     const product: Product = new Product();
 
     product.name = name;
-    product.count = 99;
+    product.type = type;
+    product.price = price;
+    product.count = count;
     product.time = new Date();
 
     // save entity
     const productResult = await this.productModel.save(product);
 
-    // save success
-    console.log('product id = ', productResult.id);
-
     return productResult;
   }
 
-  // load
-  async loadProducts() {
-    const products = await this.productModel.find();
+  // find
+  async findAllProducts() {
+    const allProducts = await this.productModel.find();
 
-    return products;
+    return allProducts;
+  }
+
+  //find product by name
+  async findProductByName(name: string) {
+    const productByName = await this.productModel.findOne({
+      where: { name: name },
+    });
+
+    return productByName;
+  }
+
+  //update product by count
+  async update(
+    id: number,
+    name: string,
+    type: string,
+    price: number,
+    count: number
+  ) {
+    const updateProduct = await this.productModel.findOne({
+      where: { id: id },
+    });
+    updateProduct.name = name;
+    updateProduct.type = type;
+    updateProduct.price = price;
+    updateProduct.count = count;
+    updateProduct.time = new Date();
+
+    await this.productModel.save(updateProduct);
+
+    return updateProduct;
+  }
+
+  //delete product by name
+  async delete(name: string) {
+    const updateProduct = await this.productModel.findOne({
+      where: { name: name },
+    });
+    const deleteProduct = await this.productModel.remove(updateProduct);
+
+    return deleteProduct;
+  }
+
+  //分页获取数据
+  async paging(num: number) {
+    const pagingData = await this.productModel
+      .createQueryBuilder('id')
+      .take(num)
+      .getMany();
+
+    return pagingData;
   }
 }
