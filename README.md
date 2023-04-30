@@ -1,0 +1,2 @@
+# odin
+szu-graduation
