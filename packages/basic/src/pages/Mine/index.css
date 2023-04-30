@@ -1,19 +1,139 @@
-body {
-  width: 100%;
-  height: 100vh;
-}
-
-.mine {
-  height: 100%;
+.mine-view {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  height: calc(100vh - 56px);
 }
-
-hr {
+.mine-view .top-choose {
+  height: 50px;
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+}
+.mine-view .top-choose .top-btn {
+  width: 100px;
+  height: 30px;
+  background: #eeebeb;
+  border-radius: 8px 8px 0 0;
+  margin: 20px 5px 0px 5px ;
+}
+.mine-view .top-choose .top-btn .btn-text {
+  width: 80px;
+  height: 15px;
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 15px;
   text-align: center;
-  width: 600px;
-  height: 1px;
-  border: none;
-  border-top: 1px solid #000;
+  margin: 7.5px auto;
+}
+.mine-view .showbg {
+  width: 60vw;
+  background: #fff;
+  height: calc(100vh - 56px - 50px - 106px - 150px);
+  box-shadow: 10px 10px 5px #ccc;
+}
+.mine-view .showbg .mine {
+  width: 800px;
+  margin: 10px auto;
+}
+.mine-view .footer {
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  bottom: 0;
+  background: url("https://www.szu.edu.cn/images/footerback_03.jpg") no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: row;
+}
+.mine-view .footer .word-area {
+  width: 40%;
+  height: 160px;
+  margin: 20px 5% 20px 5%;
+  color: white;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-size: 15px;
+  line-height: 30px;
+}
+.mine-view .footer .word-area .goHome {
+  width: 80px;
+  margin-top: auto;
+  cursor: pointer;
+}
+.mine-view .footer .code-area {
+  width: 40%;
+  height: 160px;
+  margin: 20px 5% 20px 5%;
+  display: flex;
+  flex-direction: column;
+}
+.mine-view .footer .code-area .code-bg {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+}
+.mine-view .footer .code-area .code-bg .ft-code-1 {
+  width: 100px;
+  height: 100px;
+  margin: 10px 20px;
+  background: url("https://www.szu.edu.cn/images/20/10/19/1wsambz0t9/szu-bili.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.mine-view .footer .code-area .code-bg .ft-code-2 {
+  width: 100px;
+  height: 100px;
+  margin: 10px 20px;
+  background: url("https://www.szu.edu.cn/images/20/10/19/1wsambz0t9/szu-dy.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.mine-view .footer .code-area .code-bg .ft-code-3 {
+  width: 100px;
+  height: 100px;
+  margin: 10px 20px;
+  background: url("https://www.szu.edu.cn/images/20/10/19/1wsambz0t9/szu-wx.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.mine-view .footer .code-area .code-title {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+}
+.mine-view .footer .code-area .code-title .title {
+  width: 100px;
+  height: 20px;
+  margin: 0 20px;
+  line-height: 20px;
+  font-size: 10px;
+  color: white;
+  text-align: center;
+}
+.goHome:hover {
+  font-size: 16px;
+}
+.goForum:hover {
+  font-size: 16px;
+}
+.icon1 {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 20;
+  stroke-linecap: round;
+}
+.icon:hover {
+  animation: move 3s;
+}
+@keyframes move {
+  0% {
+    stroke-dasharray: 0, 3000px;
+  }
+  100% {
+    stroke-dasharray: 3000px, 0;
+  }
 }

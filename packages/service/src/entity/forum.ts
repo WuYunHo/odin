@@ -21,6 +21,9 @@ export class Article {
   @Column()
   userID: number;
 
+  @Column()
+  username: string;
+
   @CreateDateColumn({
     type: 'timestamp',
   })
@@ -39,6 +42,11 @@ export class Article {
 
   @Column()
   light: number;
+
+  @Column({
+    type: 'text'
+  })
+  imgURL: string;
 }
 
 @Entity()
@@ -58,10 +66,122 @@ export class Comment {
   userID: number;
 
   @Column()
+  userName: string;
+
+  @Column()
   tarcomID: number;
 
   @CreateDateColumn({
     type: 'timestamp',
   })
   pubtime: Date;
+}
+
+@Entity()
+export class Activity {
+  @PrimaryGeneratedColumn()
+  actvid: number;
+
+  @Column({
+    type: 'text',
+  })
+  actvname: string;
+
+  @Column({
+    type: 'text'
+  })
+  actvaddr: string;
+
+  @Column()
+  actvtime: string;
+
+  @Column()
+  actvduration: number;
+
+  @Column({
+    type: 'text'
+  })
+  actvtext: string;
+
+  @Column()
+  leaderID: number;
+  
+  @Column()
+  leadername: string;
+
+  @Column()
+  leadertel: string;
+
+  @Column()
+  needp: number;
+
+  @Column({
+    default: 0,
+  })
+  alreadyp: number;
+
+  @Column()
+  state: number;
+
+  @Column({
+    type: 'text'
+  })
+  imgURL: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  pubtime: Date;
+}
+
+@Entity()
+export class Activitylist {
+  @PrimaryGeneratedColumn()
+  actvlistID: number;
+
+  @Column()
+  actvID: number;
+
+  @Column()
+  menberID: number;
+
+  @Column()
+  menbername: string;
+
+  @Column()
+  menbertel: string;
+
+  @Column({
+    default: 0
+  })
+  state: number;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
+  pubtime: Date;
+}
+
+@Entity()
+export class Collect {
+  @PrimaryGeneratedColumn()
+  ID: number;
+
+  @Column()
+  userID: number;
+
+  @Column()
+  articleID: number;
+}
+
+@Entity()
+export class Light {
+  @PrimaryGeneratedColumn()
+  ID: number;
+
+  @Column()
+  userID: number;
+
+  @Column()
+  articleID: number;
 }

@@ -1,0 +1,49 @@
+/* .gird {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+} */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  height: calc(100vh - 56px) ;;
+  display: grid;
+  /* grid: repeat(2, 60px) / auto-flow 80px; */
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 100px 2fr 1fr;
+  grid-template-areas: 
+    "header header header"
+    "sidebar1 content sidebar2"
+    "sidebar1 content sidebar2";
+  /* column-gap: 20px; */
+  /* row-gap: 10px;  */
+  /* background: url('https://5b0988e595225.cdn.sohucs.com/images/20190620/d54da601186043d4a34dc2e1cd63d02d.jpeg'); */
+}
+
+/* #container > div {
+  background-color: #8ca0ff;
+  width: 100%;
+  height: 100%;
+} */
+
+header {
+  grid-area: header;
+  background: url('https://www.szu.edu.cn/images/logo_03.png') top center no-repeat;
+}
+
+#left {
+  grid-area: sidebar1;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+#right {
+  grid-area: sidebar2;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+main {
+  grid-area: content;
+  /* background-color: rgba(255, 255, 255, 0.3); */
+}

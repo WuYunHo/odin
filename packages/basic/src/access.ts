@@ -3,7 +3,6 @@ export default (initialState: { userState: any; }) => {
   // 参考文档 https://next.umijs.org/docs/max/access
 
   let { userState } = initialState
-  // console.log(userState.isLogin)
   // const canSeeAdmin = !!(
   //   initialState && initialState.name !== 'dontHaveAccess'
   // );

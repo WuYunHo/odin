@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Modal, Table, Input, Select, AutoComplete } from 'antd';
+import { Button, Modal, Table, Input, Select, AutoComplete, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios'
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons'; 
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined, VerticalAlignTopOutlined } from '@ant-design/icons'; 
 import ProductForm from '@/components/product/productForm';
+import { useModel } from '@umijs/max';
 
 const { confirm } = Modal;
 const { Search } = Input;
@@ -24,13 +25,18 @@ const App: React.FC = () => {
   const [isUpdateOpen, setisUpdateOpen] = useState(false) //表单更新弹出
   const [typeDisabled, settypeDisabled] = useState(false) //表单更新时禁用属性
   const [typeList, settypeList] = useState([]) //product_type数据存储
+  const [regionList, setregionList] = useState([]) //product-region数据存储
+
   const [updateId, setupdateId] = useState(null)
   const addForm = useRef(null)
   const updateForm = useRef(null)
 
+  const masterProps = useModel('@@qiankunStateFromMaster');
+  const [user, setuser] = useState(masterProps.user)
+
   const deleteMethod = (item: any) => {
     setdataSource(dataSource.filter(data => data['id'] !== item.id)) //data.id调用报错属性未定义，转为data['id]属性名调用
-    axios.get(`/products/delete?name=${item.name}`)
+    axios.get(`/api/products/delete?name=${item.name}`)
     console.log(item.name)
   }
 
@@ -48,12 +54,19 @@ const App: React.FC = () => {
   };
 
   const addFormOk = () => {
+    console.log(imgUrl)
     addForm.current.validateFields().then((value: any)=>{
       setisAddOpen(false)
+
+      console.log(value, imgUrl)
+
       addForm.current.resetFields()
-      axios.post(`/products/addProductByName`, {
+      axios.post(`/api/products/addProductByName`, {
         ...value,
+        sellerID: user.id,
+        sellerName: user.name,
         time: new Date(),
+        imgUrl: imgUrl
       }).then(res => {
         console.log(res.data.data)
         setdataSource([...dataSource,res.data.data])
@@ -68,13 +81,13 @@ const App: React.FC = () => {
       setisUpdateOpen(false)
       updateForm.current.resetFields()
       console.log(value, item)
-      axios.post(`/products/update`, {
+      axios.post(`/api/products/update`, {
         id: item,
         ...value,
         time: new Date(),
       }).then(res => {
         console.log(res.data.data)
-        axios.get('/products/findAllProducts').then(res => {
+        axios.get('/api/products/findAllProducts').then(res => {
           console.log(res.data.data)
           setdataSource(res.data.data)
         })
@@ -97,12 +110,12 @@ const App: React.FC = () => {
  const onSearch = (value: string) => {
     console.log(value);
     if (value === '') {
-      axios.get('/products/findAllProducts').then(res => {
+      axios.get('/api/products/findAllProducts').then(res => {
         console.log(res.data.data)
         setdataSource(res.data.data)
       })
     } else {
-      axios.get(`/products/findProductByName?name=${value}`).then(res => {
+      axios.get(`/api/products/findProductByName?name=${value}`).then(res => {
         console.log(res.data.data)
         const findarr = [res.data.data]
         setdataSource(findarr)
@@ -175,18 +188,49 @@ const App: React.FC = () => {
   ];
   
   useEffect(() => {
-    axios.get('/products/findAllProducts').then(res => {
+    axios.get('/api/products/findAllProducts').then(res => {
       console.log(res.data.data)
       setdataSource(res.data.data)
     })
   }, [])
 
   useEffect(() => {
-    axios.get('/products/findAllProductTypes').then(res => {
+    axios.get('/api/products/findAllProductTypes').then(res => {
       console.log(res.data.data)
       settypeList(res.data.data)
     })
   }, [])
+
+  useEffect(() => {
+    axios.get('/api/products/findAllProductRegions').then(res => {
+      console.log(res.data.data)
+      setregionList(res.data.data)
+    })
+  }, [])
+
+  const [imgUrl, setimgUrl] = useState('')
+
+  const toUpload = () => {
+    const fileInput = document.querySelector('#file-input')
+    
+    let formData = new FormData();
+    
+    formData.append('file', fileInput.files[0])
+    // console.log(fileInput)
+
+    // for(let value of formData.values()){
+    //   console.log(value);   
+    // }
+    fetch('/api/login/upload', {
+      method: 'POST',
+      body: formData,
+    }).then(response => response.json())
+    .then(data => {
+      console.log(data)
+      message.success('图片上传成功！')
+      setimgUrl(data.imgUrl)
+    });
+  }
 
   return (
     <div>
@@ -208,7 +252,7 @@ const App: React.FC = () => {
       
       <Button type='primary' style={{ float: 'right' }} onClick={() => {
           setisAddOpen(true)
-        }}>添加用户</Button>
+        }}>添加商品</Button>
       
       <Modal
         open={isAddOpen}
@@ -220,7 +264,13 @@ const App: React.FC = () => {
         }}
         onOk={() => addFormOk()}
       >
-        <ProductForm typeList={typeList} ref={addForm}></ProductForm>
+        <ProductForm typeList={typeList} regionList={regionList} ref={addForm}></ProductForm>
+        <form id='uploadForm' method="post" encType="multipart/form-data" style={{display: 'flex'}}>
+          {/* Name: <input type="text" className='name' name="name" /><br /> */}
+          图片：<input type="file" className='testFile' name="testFile" id='file-input'/><br />
+          {/* <input type="button" value="button" onClick={()=>toUpload()} style={{marginLeft: 'auto'}}/> */}
+          <Button icon={<VerticalAlignTopOutlined />} onClick={()=>toUpload()} style={{marginLeft: 'auto'}}></Button>
+        </form>
       </Modal>
 
       <Modal
@@ -234,7 +284,7 @@ const App: React.FC = () => {
         }}
         onOk={() => updateFormOk(updateId)}
       >
-        <ProductForm typeList={typeList} ref={updateForm} typeDisabled={typeDisabled}></ProductForm>
+        <ProductForm typeList={typeList} regionList={regionList} ref={updateForm} typeDisabled={typeDisabled}></ProductForm>
       </Modal>
     </div> 
   );

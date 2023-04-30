@@ -36,6 +36,11 @@ export default defineConfig({
         component: './Table',
     },
   ],
+  // qiankun: {
+  //   slave: {
+  //     enable: true
+  //   },
+  // },
   npmClient: 'pnpm',
 });
 

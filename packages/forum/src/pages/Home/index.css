@@ -1,8 +1,81 @@
-.pubcardborder {
-  background: #e4e3e3;
-}
-
 .pubcard {
-  background-color: #ffffff;
-  margin: 10px;
+  background-color: rgba(0, 0, 0, 0.01);
+  height: 200px;
+  width: 70%;
+  margin: 10px auto;
+  position: relative;
+}
+.pubcard .title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+  height: 20px;
+  margin: 5px 0 5px 5px;
+  position: relative;
+  display: inline-block;
+}
+.pubcard .title .light-num {
+  position: absolute;
+  top: -2px;
+  margin-left: 10px;
+  font-size: 12px;
+  color: #f54646;
+  border: 1px solid #E4E1E2;
+  height: 15px;
+  line-height: 15px;
+  padding: 0 10px;
+  padding: 1px 10px 0\9;
+  background: #fcfcfc;
+}
+.pubcard .title .light-num .tri1 {
+  position: absolute;
+  font-size: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  line-height: 0;
+  bottom: -7px;
+  left: -1px;
+  border-style: dashed none dashed solid;
+  border-color: transparent transparent transparent #E4E1E2;
+  border-width: 6px 0 6px 6px;
+}
+.pubcard .title .light-num .tri2 {
+  position: absolute;
+  font-size: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  line-height: 0;
+  bottom: -5px;
+  left: 0;
+  border-style: dashed none dashed solid;
+  border-color: transparent transparent transparent #fcfcfc;
+  border-width: 6px 0 6px 6px;
+}
+.pubcard .context {
+  height: calc(140px - 1rem);
+}
+.pubcard .footer {
+  height: 20px;
+  margin: 5px 0 5px 5px;
+  display: flex;
+  flex-direction: row;
+}
+.pubcard .footer .button {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
+.pubcard:hover {
+  box-shadow: -8px 6px 6px #cccccc;
+  background: linear-gradient(to left, white, rgba(0, 0, 0, 0.05));
+}
+hr {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.content::-webkit-scrollbar {
+  width: 0 !important;
 }

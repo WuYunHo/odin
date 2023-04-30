@@ -1,7 +1,9 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
+import { VerticalAlignTopOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 
 const ProductForm: React.FC<any> = forwardRef((props, ref) => {
@@ -27,7 +29,7 @@ const ProductForm: React.FC<any> = forwardRef((props, ref) => {
         <Form.Item
           name="type"
           label="商品类型"
-          rules={isDisabled ? [] : [{ required: true, message: 'Please input your name of collection!' }]}
+          rules={isDisabled ? [] : [{ required: true, message: 'Please input your type of collection!' }]}
         >
           <Select disabled={isDisabled}>
             {
@@ -37,6 +39,21 @@ const ProductForm: React.FC<any> = forwardRef((props, ref) => {
             }
           </Select>
         </Form.Item>
+
+        <Form.Item
+          name="region"
+          label="售卖区域"
+          rules={isDisabled ? [] : [{ required: true, message: 'Please input your region of collection!' }]}
+        >
+          <Select disabled={isDisabled}>
+            {
+              props.regionList.map((item: any) =>
+                <Option value={item['region_content']} key={item['id']}>{item['region_content']}</Option>
+              )
+            }
+          </Select>
+        </Form.Item>
+
         <Form.Item
           name="price"
           label="商品价格"
@@ -50,6 +67,13 @@ const ProductForm: React.FC<any> = forwardRef((props, ref) => {
           rules={[{ required: true, message: 'Please input your name of collection!' }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          name="descriptions"
+          label="介绍"
+          rules={[{ required: true, message: 'Please input your name of collection!' }]}
+        >
+          <TextArea rows={4} />
         </Form.Item>
       </Form>
     </div>

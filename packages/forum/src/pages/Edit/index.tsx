@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Button, Checkbox, Form, Input, Popover, Steps, message, notification  } from 'antd';
 import { PageContainer } from '@ant-design/pro-components';
 import {
-  QuestionOutlined
+  QuestionOutlined, VerticalAlignTopOutlined
 } from '@ant-design/icons';
 import style from './index.module.css'
 import Forumeditor from '@/components/Guide/Forumeditor';
@@ -32,12 +32,17 @@ const App: React.FC = () => {
   const handleNext = () => {
     // setuser(masterProps.initialState.userInfo)
     if(current === 0){
-      forumRef.current.validateFields().then((res: any)=>{
-        setcurrent( current + 1 )
-        setformInfo(res)
-      }).catch( (err: any) => {
-        console.log(err)
-      })
+      if(user.tel && user.addr){
+        forumRef.current.validateFields().then((res: any)=>{
+          setcurrent( current + 1 )
+          setformInfo(res)
+        }).catch( (err: any) => {
+          console.log(err)
+        })
+      }else{
+        message.error('请完善个人信息！')
+      }
+      
     }else{
       if(content === '' || content.trim() === "<p><p>"){
         message.error('内容不能为空!')
@@ -53,8 +58,10 @@ const App: React.FC = () => {
     axios.post('/api/forumapi/addArticle ', {
       context: content, 
       userID: user.id, 
+      username: user.name,
       title: formInfo.title,
       state: state,
+      imgURL: imgUrl,
     }).then(res=>{
       console.log(res)
       //跳转
@@ -71,19 +78,6 @@ const App: React.FC = () => {
         placement: 'bottomRight'
       })      
     })
-    
-    // if(state === 0){
-    //   history.push('/access')
-    // }else if(state === 1){
-    //   history.push('/draft')
-    // }
-
-    // notification.info({
-    //   message: '通知',
-    //   description:
-    //     `您可以到${ state === 0 ? '草稿箱' : '审核列表'}查看您的贴子`,
-    //   placement: 'bottomRight'
-    // })
   }
 
   const handlePerivious = () => {
@@ -91,6 +85,30 @@ const App: React.FC = () => {
   }
 
   const forumRef = useRef(null)
+
+  const [imgUrl, setimgUrl] = useState('')
+
+  const toUpload = () => {
+    const fileInput = document.querySelector('#file-input')
+    
+    let formData = new FormData();
+    
+    formData.append('file', fileInput.files[0])
+    // console.log(fileInput)
+
+    // for(let value of formData.values()){
+    //   console.log(value);   
+    // }
+    fetch('/api/login/upload', {
+      method: 'POST',
+      body: formData,
+    }).then(response => response.json())
+    .then(data => {
+      console.log(data)
+      message.success('图片上传成功！')
+      setimgUrl(data.imgUrl)
+    });
+  }
 
   return (
     <PageContainer ghost>
@@ -124,9 +142,9 @@ const App: React.FC = () => {
       <div className={current === 0 ? '':style.active}>
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          labelCol={{ span: 4.8 }}
+          wrapperCol={{ span: 19.2 }}
+          style={{ maxWidth: 600, margin: 'auto' }}
           initialValues={{ remember: true }}
           autoComplete="off"
           ref={forumRef}
@@ -140,14 +158,21 @@ const App: React.FC = () => {
             <Input />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="description"
             name="description"
             rules={[{ required: true, message: 'Please input your username!' }]}
           >
             <Input />
-          </Form.Item>
+          </Form.Item> */}
         </Form>
+
+        <form id='uploadForm' method="post" encType="multipart/form-data" style={{display: 'flex', maxWidth: '600px', margin: '0 auto'}}>
+          {/* Name: <input type="text" className='name' name="name" /><br /> */}
+          图片：<input type="file" className='testFile' name="testFile" id='file-input'/><br />
+          {/* <input type="button" value="button" onClick={()=>toUpload()} style={{marginLeft: 'auto'}}/> */}
+          <Button icon={<VerticalAlignTopOutlined />} onClick={()=>toUpload()} style={{marginLeft: 'auto'}}></Button>
+        </form>
       </div>
 
       <div className={current === 1 ? '':style.active} style={{marginTop: '50px'}}>

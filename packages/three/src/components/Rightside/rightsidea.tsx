@@ -18,7 +18,7 @@ export default function Rightsidea() {
       });
   };
   const config = {
-    height: 400,
+    height: 350,
     data,
     xField: 'year',
     yField: 'gdp',
@@ -36,7 +36,7 @@ export default function Rightsidea() {
     animation: {
       appear: {
         animation: 'path-in',
-        duration: 10000,
+        duration: 20000,
       },
     },
   };

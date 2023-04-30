@@ -13,23 +13,27 @@ export default defineConfig({
   routes: [ 
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/Registration',
     },
     {
-      name: '首页',
+      name: '活动报名',
+      path: '/registration',
+      component: './Registration', 
+    },
+    {
+      name: '论坛',
       path: '/home',
       component: './Home', 
     },
     {
-      name: '发帖',
+      name: '发布帖子',
       path: '/edit',
       component: './Edit',
     },
     {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
-      access: 'canSeeAccess'
+      name: '发布活动',
+      path: '/actvedit',
+      component: './actvEdit',
     },
     {
       name: '我的帖子',
@@ -37,9 +41,21 @@ export default defineConfig({
       component: './Draft',
     },
     {
-      name: '审核列表',
+      name: '我的活动',
+      path: '/actvdraft',
+      component: './actvDraft',
+    },
+    {
+      name: '审核列表(帖子)',
       path: '/drafting',
       component: './Drafting',
+      access: 'admin'
+    },
+    {
+      name: '审核列表(活动)',
+      path: '/actvdrafting',
+      component: './actvDrafting',
+      access: 'admin'
     },
   ],
   npmClient: 'pnpm',

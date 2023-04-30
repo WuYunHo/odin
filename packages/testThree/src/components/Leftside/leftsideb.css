@@ -1,0 +1,9 @@
+.liquidgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* .rightLiquid div .g2-html-annotation {
+  width: 60px;
+  height: 20px;
+} */

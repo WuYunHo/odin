@@ -1,8 +1,19 @@
-import {MicroAppWithMemoHistory} from '@umijs/max';
+import { MicroAppWithMemoHistory, useModel } from '@umijs/max';
+import { Tag } from 'antd';
 import styles from "./index.less";
 
 export default function () {
+  const { user } = useModel('user')
+  // if(!user){
+  //   history.push('./home')
+  // }
+  console.log(user)
   return <div className={styles.basicContainer}>
-    <MicroAppWithMemoHistory name={"product"} url={"/product"}/>
+    {
+      !user ? <div style={{textAlign: 'center'}} className={styles.nouser}>
+        <Tag color='green'>请登录！</Tag>
+      </div> : <MicroAppWithMemoHistory name={"product"} url={"/product"}/>
+    }
+    
   </div>
 }

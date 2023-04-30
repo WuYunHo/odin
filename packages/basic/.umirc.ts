@@ -13,7 +13,8 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      // redirect: '/home',
+      redirect: '/mine',
     },
     {
       name: '首页',
@@ -21,12 +22,12 @@ export default defineConfig({
       component: './Home',
     },
     {
-      name: '论坛',
+      name: '志愿活动',
       path: '/forum',
       component: './Forum',
     },
     {
-      name: '小卖部',
+      name: '纪念品',
       path: 'product',
       component: './Product'
     },
@@ -36,7 +37,7 @@ export default defineConfig({
       component: './Exhibition'
     },
     {
-      name: '政策公开',
+      name: '信息公开',
       path: 'policy',
       component: './Policy'
     },
@@ -44,6 +45,11 @@ export default defineConfig({
       name: '我的',
       path: 'mine',
       component: './Mine'
+    },
+    {
+      name: '测试页',
+      path: 'test',
+      component: './Test'
     },
   ],
   npmClient: 'pnpm',
@@ -55,22 +61,46 @@ export default defineConfig({
           name: 'forum',
           entry: '//localhost:8001',
         },
-        // {
-        //   name: 'product',
-        //   entry: '//localhost:8002'
-        // },
-        // {
-        //   name: 'exhibition',
-        //   entry: '//localhost:8001'
-        // },
+        {
+          name: 'product',
+          entry: '//localhost:8002'
+        },
+        {
+          name: 'testthree',
+          entry: '//localhost:8003'
+        },
+        {
+          name: 'exhibition',
+          entry: '//localhost:8004'
+        },
       ]
     },
   },
   proxy: {
-    '/api/forum': {
-      'target': 'http://localhost:8001',
+    // '/api/forum': {
+    //   'target': 'http://localhost:8001',
+    //   'changeOrigin': true,
+    //   // "pathRewrite": { "^/api": ''}
+    // },
+    // '/api/products': {
+    //   'target': 'http://localhost:8002',
+    //   'changeOrigin': true,
+    //   // "pathRewrite": { "^/api": ''}
+    // },
+    '/api/products': {
+      'target': 'http://localhost:7001',
       'changeOrigin': true,
-      // "pathRewrite": { "^/api": ''}
+      "pathRewrite": { "^/api": ''}
+    },
+    '/api/login': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+      "pathRewrite": { "^/api": ''}
+    },
+    '/api/forumapi': {
+      'target': 'http://localhost:7001',
+      'changeOrigin': true,
+      "pathRewrite": { "^/api": ''}
     }
   },
 });

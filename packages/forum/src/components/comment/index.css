@@ -1,0 +1,11 @@
+.comment-top {
+  display: flex;
+  flex-direction: row;
+}
+.sendtips {
+  height: 15px;
+  width: 100%;
+  color: #cccccc;
+  font-size: 12px;
+  line-height: 12px;
+}

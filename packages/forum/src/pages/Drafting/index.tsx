@@ -98,7 +98,6 @@ const AccessPage: React.FC = () => {
   }
   
   const handlePubing = (item: any) => {
-      console.log('handlePub', item)
 
       //修改数据状态为1
       //state = 0（未提交） 1 （审核中） 2（未通过） 3（已发布）

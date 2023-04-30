@@ -42,7 +42,7 @@ function Items({ w = 0.7, gap = 0.15 }) {
 }
 
 export const ExApp = () => (
-  <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} onPointerMissed={() => (state.clicked = null)} style={{height: '94vh'}}>
+  <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} onPointerMissed={() => (state.clicked = null)} style={{height: '94vh'}} onClick={()=>console.log(111)}>
     <Items />
   </Canvas>
 )

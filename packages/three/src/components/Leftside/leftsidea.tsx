@@ -163,8 +163,8 @@ export default function Leftsidea() {
 
   return (
     <div style={{position: 'relative', textAlign: 'center'}}>
-      <Tag color="volcano">volcano</Tag>
-      <Column {...configb} />
+      {/* <Tag color="volcano">volcano</Tag>
+      <Column {...configb} /> */}
       <Tag color="orange">orange</Tag>
       <Line {...configa} />
     </div>

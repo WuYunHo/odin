@@ -7,43 +7,46 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {
-    title: '@umijs/max',
+    title: '商品',
     headerTheme: 'dark',
   },
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/product-card',
     },
+    // {
+    //   name: '首页',
+    //   path: '/home',
+    //   component: './Home',
+    // },
     {
       name: '首页',
-      path: '/home',
-      component: './Home',
-    },
-    {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
-    },
-    {
-      name: 'CRUD 示例',
-      path: '/table',
-      component: './Table',
-    },
-    {
-      name: 'product-商家分类发布',
-      path: '/product-cfy',
-      component: './Product-cfy',
-    },
-    {
-      name: 'product-商家表格展示',
-      path: '/product-table',
-      component: './Product-table',
-    },
-    {
-      name: 'product-用户表格展示',
       path: '/product-card',
       component: './Product-card',
+      // access: 'student',
+    },
+    {
+      name: '分类发布',
+      path: '/product-cfy',
+      component: './Product-cfy',
+      access: 'admin',
+    },
+    {
+      name: '商品发布',
+      path: '/product-table',
+      component: './Product-table',
+      access: 'seller',
+    },
+    {
+      name: '订单',
+      path: '/order',
+      component: './Order',
+      access: 'vol',
+    },
+    {
+      path: '/test',
+      component: './Test',
     },
   ],
   npmClient: 'pnpm',
@@ -54,9 +57,10 @@ export default defineConfig({
   },
 
   proxy: {
-    '/products': {
+    '/api/': {
       'target': 'http://localhost:7001',
       'changeOrigin': true,
+      "pathRewrite": { "^/api": ''}
     }
   }
 });

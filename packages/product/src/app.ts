@@ -14,5 +14,6 @@ export const layout = () => {
     menu: {
       locale: false,
     },
+    colorPrimary: '#881945',
   };
 };

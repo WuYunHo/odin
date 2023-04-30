@@ -1,0 +1,5 @@
+.basicContainer {
+  width: 100%;
+  height: calc(100vh - 56px);
+  transform: scale(1);
+}

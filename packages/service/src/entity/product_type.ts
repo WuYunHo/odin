@@ -10,3 +10,15 @@ export class Product_type {
   })
   type_content: string;
 }
+
+
+@Entity()
+export class Product_region {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({
+    length: 200,
+  })
+  region_content: string;
+}

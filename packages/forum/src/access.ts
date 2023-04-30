@@ -5,11 +5,8 @@ export default (initialState: API.UserInfo) => {
   // 参考文档 https://next.umijs.org/docs/max/access
   const masterProps = useModel('@@qiankunStateFromMaster');
   console.log(masterProps.user)
-  // const canSeeAdmin = !!(
-  //   initialState && initialState.name !== 'dontHaveAccess'
-  // );
   return {
     // canSeeAdmin,
-    canSeeAccess: masterProps.user.id === 1
+    admin: masterProps.user.type === 3
   };
 };

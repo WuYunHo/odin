@@ -1,6 +1,6 @@
 import { PageContainer } from '@ant-design/pro-components';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Space, Table, Tag, Modal, Form, Input } from 'antd';
+import { Button, Space, Table, Tag, Modal, Form, Input, message } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import axios from 'axios';
 import { history, useModel } from '@umijs/max';
@@ -27,6 +27,9 @@ const AccessPage: React.FC = () => {
 
   const forminfo = useRef(null)
   const [modalcontext, setmodalcontext] = useState('')
+
+  const masterProps = useModel('@@qiankunStateFromMaster');
+  const [user, setuser] = useState(masterProps.user)
 
   // const { articledata, loadarticles } = useModel('forum')
   // console.log(articledata.list)
@@ -55,7 +58,7 @@ const AccessPage: React.FC = () => {
   useEffect(() => {
     // setuser(masterProps.initialState.userInfo)
     axios.post('/api/forumapi/findDraft', {
-      userID: 0
+      userID: user.id
     }).then(res=>{
       console.log(res)
       // console.log('change:', change)
